@@ -13,25 +13,24 @@ const db = require("knex")({
 });
 
 const cors = require("cors");
-const app = express();
+const test = express();
 
 const port = 4001;
-app.use(express.json());
-app.use(cors());
+test.use(express.json());
+test.use(cors());
 
-app.get("/todos", async (req, res) => {
-  const todos = await db.select().from('todos');
-  res.send(todos);
+test.get('/todos', (req, res) => {
+  res.send('Bonjour !'); 
 });
 
-app.post("/todos", async (req, res) => {
+test.post("/todos", async (req, res) => {
   //TO_MODIFY
 });
 
-app.delete("/todos/:todoId", async (req, res) => {
+test.delete("/todos/:todoId", async (req, res) => {
   //TO_MODIFY
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+test.listen(port, () => {
+  console.log(`Example test listening on port ${port}`);
 });

@@ -1,24 +1,8 @@
-version: '3'
+version: '3.9'
 services:
   backend:
-    build:
-        dockerfile: ./backend/Dockerfile
+    build: 
+      context: ./backend
     ports:
       - "4001:4001"
-    environment:
-      - HOST=${HOST}
-      - PORT=${PORT}
-      - USER=${USER}
-      - PASSWORD=${PASSWORD}
-      - DATABASE=${DATABASE}
-    depends_on:
-      - db
-  db:
-    image: mysql:8
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-    ports:
-      - "3306:3306"
+
