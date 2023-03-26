@@ -13,24 +13,47 @@ const db = require("knex")({
 });
 
 const cors = require("cors");
-const test = express();
+const app = express();
 
 const port = 4001;
-test.use(express.json());
-test.use(cors());
+app.use(express.json());
+app.use(cors());
 
-test.get('/todos', (req, res) => {
-  res.send('Bonjour !'); 
+app.get("/todos", async (req, res) => {
+  try {
+    const todos = await db("todos").select("*");
+    res.status(200).json(todos);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
-test.post("/todos", async (req, res) => {
-  //TO_MODIFY
+app.post("/todos", async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    await db("todos").insert({ title, description });
+    return res.status(201).send({ message: "Todo created successfully!" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ message: "Internal server error" });
+  }
 });
 
-test.delete("/todos/:todoId", async (req, res) => {
-  //TO_MODIFY
+app.delete("/todos/:todoId", async (req, res) => {
+  try {
+    const { todoId } = req.params;
+    const deletedTodo = await db("todos").where("id", todoId).del();
+    if (!deletedTodo) {
+      return res.status(404).send({ message: "Todo not found" });
+    }
+    return res.status(200).send({ message: "Todo deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ message: "Internal server error" });
+  }
 });
 
-test.listen(port, () => {
-  console.log(`Example test listening on port ${port}`);
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
 });
